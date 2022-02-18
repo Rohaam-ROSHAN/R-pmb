@@ -1,6 +1,6 @@
 #abcd 
 #calf.py : main file to  execute.
-# from Token import *
+from Token import *
 from  util import *
 from constant import considered_letters , phrase
 import csv
