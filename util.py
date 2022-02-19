@@ -1,40 +1,26 @@
-#Token.py : 
-class Token:
-    def __init__(self, *args):
-        self.items = [*args]
-        self.representation = "_".join(self.items)
+import argparse
 
-    def __str__(self):
-        return self.representation
 
-    def __repr__(self):
-        return self.representation
+def get_cli_args(s = None) -> argparse.Namespace:
+    """
+    Get command line arguments.
+    I stole this from the dummy package of our course.
+    """
+    parser = argparse.ArgumentParser(description="Calf")
+    subparsers = parser.add_subparsers(help='sub-command', dest='command')
 
-    def __getitem__(self, item):
-        return self.items[item]
+    # Add Command Line arguments for the tokeniser
+    parser_knn = subparsers.add_parser("tokenise", help="Tokenise a sentence")
+    parser_knn.add_argument("--sentence", type=str, default="Ne soyez pas paresseux !", help="The sentence to tokenise")
+    parser_knn.add_argument("--iob", type=bool, default=False, help="Binary option to display the IOB tags")
 
-    def __len__(self):
-        return len(self.representation)
+    # Add Command Line arguments for the extractor
+    parser_knn = subparsers.add_parser("extract", help="Tokenise and extract sentences in a tsv file")
+    parser_knn.add_argument("indir", type=str, help="Input file directory")
+    parser_knn.add_argument("--outdir", type=str, default="6261677565747465.tsv", help="Output file directory")
+    parser_knn.add_argument("--iob", type=bool, default=False, help="Binary option to extract the IOB tags")
 
-class CharSeq :
-    def __init__(self, string, is_token = False) :
-        self.string = string 
-        self.is_token = is_token
-    def __str__(self) -> str:
-        return self.string
-    def __repr__(self) -> str:
-        return self.__str__()
-
-class PhraseToken (CharSeq) :
-    def __init__(self, string, items, is_token=False):
-        super().__init__(string, is_token)
-        self.items = items
-    def __repr__(self) :
-        return str(self.items)
-    def __str__(self) -> str:
-        return self.__repr__()
-
-class SolidToken (CharSeq) :
-    def __init__(self, string):
-        super().__init__(string, True)
-        
+    if s == None :
+        return parser.parse_args()
+    else :
+        return parser.parse_args(s)
